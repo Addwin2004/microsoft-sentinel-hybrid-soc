@@ -1,0 +1,16 @@
+// =========================================================================
+// Health & Ops: Azure Arc & Azure Monitor Agent (AMA) Heartbeat Check
+// Target Table: Heartbeat
+// Description: Audits connectivity, OS type, agent version, and telemetry latency.
+// =========================================================================
+
+Heartbeat
+| summarize 
+    LastHeartbeat = max(TimeGenerated),
+    OSMajorVersion = any(OSMajorVersion),
+    OSType = any(OSType),
+    Version = any(Version),
+    ComputerIP = any(ComputerIP)
+    by Computer, ResourceGroup, SubscriptionId
+| extend MinutesSinceLastHeartbeat = datetime_diff('minute', now(), LastHeartbeat)
+| project Computer, ResourceGroup, OSType, Version, LastHeartbeat, MinutesSinceLastHeartbeat

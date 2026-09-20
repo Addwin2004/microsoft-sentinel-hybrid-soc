@@ -1,0 +1,20 @@
+// =========================================================================
+// Detection: Multiple Failed Windows Logons (Brute Force / Password Spray)
+// MITRE ATT&CK: Credential Access -> Brute Force (T1110)
+// Target Table: SecurityEvent
+// Description: Detects rapid consecutive failed logons (Event ID 4625) 
+//              within a 5-minute evaluation window.
+// =========================================================================
+
+SecurityEvent
+| where EventID == 4625
+| summarize 
+    FailedCount = count(),
+    StartTime = min(TimeGenerated),
+    EndTime = max(TimeGenerated)
+    by Account, Computer, IpAddress
+| where FailedCount >= 3
+| extend 
+    HostCustomEntity = Computer,
+    AccountCustomEntity = Account,
+    IPCustomEntity = IpAddress

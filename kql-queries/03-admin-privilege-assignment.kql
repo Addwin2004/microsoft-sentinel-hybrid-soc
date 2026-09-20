@@ -1,0 +1,15 @@
+// =========================================================================
+// Threat Hunt: Administrator Privilege Assignment
+// MITRE ATT&CK: Privilege Escalation -> Valid Accounts (T1078)
+// Target Table: SecurityEvent
+// Description: Monitors special privileges assigned to new logon tokens (Event ID 4672).
+// =========================================================================
+
+SecurityEvent
+| where EventID == 4672
+| project 
+    TimeGenerated,
+    Account,
+    Computer,
+    PrivilegeList
+| order by TimeGenerated desc

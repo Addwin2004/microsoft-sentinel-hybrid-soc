@@ -1,0 +1,23 @@
+// =========================================================================
+// Detection: Suspicious Rogue Local Account Creation (Persistence)
+// MITRE ATT&CK: Persistence -> Local Account (T1136.001)
+// Target Table: SecurityEvent
+// Description: Detects unauthorized creation and subsequent deletion 
+//              of local user accounts (Event IDs 4720, 4726).
+// =========================================================================
+
+SecurityEvent
+| where EventID in (4720, 4726)
+| project 
+    TimeGenerated,
+    EventID,
+    Activity,
+    TargetAccount,
+    SubjectUserName,
+    SubjectDomainName,
+    Computer
+| extend 
+    HostCustomEntity = Computer,
+    AccountCustomEntity = TargetAccount,
+    ActorAccount = SubjectUserName
+| order by TimeGenerated desc

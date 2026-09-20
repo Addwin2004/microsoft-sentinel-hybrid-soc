@@ -1,0 +1,10 @@
+# Windows thumbnail cache & desktop.ini
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary or swap files
+*.tmp
+*.bak
+*~
